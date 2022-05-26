@@ -1,13 +1,11 @@
 package CriandoObjetoSenha;
 
 import javax.swing.*;
-import CriandoObjetoSenha.Senha;
 
-import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class TelaInicial extends Component {
+public class TelaInicial extends JFrame {
     private JPanel panel1;
     private JLabel jlusuario;
     private JLabel jlsenha;
@@ -20,27 +18,50 @@ public class TelaInicial extends Component {
     private JButton btnatualizar;
     private JButton btnexcluir;
     public Senha senhasempre;
-    Senha s1 = new Senha();
 
     public TelaInicial() {
+        setTitle("Cadastro de Senhas");
+        setContentPane(panel1);
+        setSize(500, 500);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setVisible(true);
+        
+        cadastra();
+        pesquisa();
+        atualiza();
+        exclui();
+    }
+    
+    public void cadastra() {
         btncadastrar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                senhasempre = TrataBotaoInserir(s1);
+                Senha novaSenha = new Senha();
+                senhasempre = TrataBotaoInserir(novaSenha);
+                
             }
         });
+    }
+    
+    public void pesquisa() {
         btnpesquisar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 TrataPesquisa(senhasempre);
             }
         });
+    }
+    
+    public void atualiza() {
         btnatualizar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 TrataAtualizar(senhasempre);
             }
         });
+    }
+    
+    public void exclui() {
         btnexcluir.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -49,24 +70,24 @@ public class TelaInicial extends Component {
         });
     }
 
-    public Senha TrataBotaoInserir (Senha s) {
+    public Senha TrataBotaoInserir(Senha s) {
 
     s.setUsuario(txtusuario.getText());
     s.setSenha(new String(passsenha.getPassword()));
     s.setConfirmeaSenha(new String(passConfirmeaSenha.getPassword()));
 
-    if(s.getSenha().equals(s.getConfirmeaSenha())) {
-        JOptionPane.showMessageDialog(this, "Senha Cadastrada com Sucesso!" + s.getUsuario());
+    if(!s.getSenha().equals(s.getConfirmeaSenha()) || s.getSenha().equals("")) {
+        JOptionPane.showMessageDialog(this, "Inválido! Digite a senha igual!");
+    }else if(s.getUsuario().equals("") ||  !Character.isUpperCase(s.getUsuario().charAt(0))) {
+        JOptionPane.showMessageDialog(this, "O nome do usuário deve conter a primeira letra maiuscula!");
     }
     else {
-        JOptionPane.showMessageDialog(this, "Inválido! Digite a senha igual!");
+        JOptionPane.showMessageDialog(this, "Usuário(" + s.getUsuario() + ")cadastrado com sucesso!");
     }
-
         return s;
-
     }
 
-    public void TrataPesquisa (Senha s) {
+    public void TrataPesquisa(Senha s) {
         System.out.print(s.getUsuario());
 
         if (txtusuario.getText().equals(s.getUsuario())) {
@@ -79,7 +100,7 @@ public class TelaInicial extends Component {
         }
     }
 
-    public Senha TrataAtualizar (Senha s) {
+    public Senha TrataAtualizar(Senha s) {
         txtusuario.getText().equals(s.getUsuario());
         txtusuario.setText(s.getUsuario());
         passConfirmeaSenha.setText(s.getConfirmeaSenha());
